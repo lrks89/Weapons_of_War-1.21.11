@@ -44,23 +44,21 @@ public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, Thr
 
         ItemStack stack = entity.getItem();
 
-        // 1. Extract the Weapon Family from the item
         if (stack.getItem() instanceof WeaponItem weaponItem) {
             state.family = weaponItem.getConfig().family();
         } else {
-            state.family = null; // Default behavior
+            state.family = null;
         }
 
-        // Populate the ItemStackRenderState with model data
         this.itemModelResolver.updateForNonLiving(state.itemRenderState, stack, ItemDisplayContext.FIXED, entity);
 
-        // Capture interpolated rotation
         state.xRot = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
         state.yRot = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
-
         state.shakeTime = (float)entity.shakeTime - partialTicks;
 
-        // Culling logic
+        // Capture returning state (no longer used for spin, but kept for potential future use)
+        state.isReturning = entity.isReturning();
+
         if (this.entityRenderDispatcher.camera != null) {
             double distSqr = this.entityRenderDispatcher.distanceToSqr(entity);
             state.isInvisible = entity.tickCount < 2 && distSqr < 12.25D;
@@ -69,7 +67,6 @@ public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, Thr
 
     @Override
     public void submit(ThrownWeaponState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
-        // Handle name tags and leashes from super
         super.submit(state, poseStack, submitNodeCollector, cameraRenderState);
 
         if (state.isInvisible || state.itemRenderState.isEmpty()) {
@@ -78,7 +75,8 @@ public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, Thr
 
         poseStack.pushPose();
 
-        // 1. Rotation logic: Align the coordinate system with the flight path
+        // 1. Rotation logic - REMOVED the 'if (state.isReturning)' block
+        // Always use standard flight rotation (pitch/yaw)
         poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(state.xRot));
 
@@ -88,11 +86,8 @@ public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, Thr
             poseStack.mulPose(Axis.ZP.rotationDegrees(f));
         }
 
-        // 3. Depth Adjustment (offset along X axis)
-        // Positive X = Deeper in target
-        // Negative X = Further out (sticking out more)
+        // 3. Depth Adjustment
         double offset = 0.0D;
-
         if (state.family != null) {
             switch (state.family) {
                 case DAGGER, FIST, CLAW:
@@ -115,35 +110,34 @@ public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, Thr
             }
         }
 
+        // Re-enabled depth offset during return since it doesn't spin anymore
         poseStack.translate(offset, 0.0D, 0.0D);
 
-        // 4. Scale and Orient
+        // 4. Scale
         poseStack.scale(this.scale, this.scale, this.scale);
 
-        // 5. Rotation Correction based on Family
+        // 5. Texture Correction
         float rotation = -135.0F;
-
         poseStack.mulPose(Axis.ZP.rotationDegrees(rotation));
 
-        // Render using the submit method in ItemStackRenderState
         state.itemRenderState.submit(
                 poseStack,
                 submitNodeCollector,
                 this.fullBright ? 15728880 : state.lightCoords,
                 OverlayTexture.NO_OVERLAY,
-                0 // Seed
+                0
         );
 
         poseStack.popPose();
     }
 
-    // Inner class to hold the rendering state
     public static class ThrownWeaponState extends EntityRenderState {
         public final ItemStackRenderState itemRenderState = new ItemStackRenderState();
         public float xRot;
         public float yRot;
         public float shakeTime;
         public boolean isInvisible;
-        public WeaponFamily family; // Store the family here
+        public WeaponFamily family;
+        public boolean isReturning;
     }
 }
