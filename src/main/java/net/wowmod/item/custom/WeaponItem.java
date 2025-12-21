@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.wowmod.WeaponsOfWar;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.wowmod.item.custom.mechanics.BlockingMechanics;
+import net.wowmod.item.custom.mechanics.ThrowingMechanics;
 
 import java.util.function.Consumer;
 
@@ -101,27 +102,53 @@ public class WeaponItem extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        // Try to handle blocking interaction first
-        InteractionResult result = BlockingMechanics.handleUse(config, level, player, hand);
+        // 1. Try Blocking
+        InteractionResult blockResult = BlockingMechanics.handleUse(config, level, player, hand);
+        if (blockResult != InteractionResult.PASS) {
+            return blockResult;
+        }
 
-        // If blocking didn't consume the action (result is PASS), fallback to default Item behavior
-        if (result != InteractionResult.PASS) {
-            return result;
+        // 2. Try Throwing
+        InteractionResult throwResult = ThrowingMechanics.handleUse(config, level, player, hand);
+        if (throwResult != InteractionResult.PASS) {
+            return throwResult;
         }
 
         return super.use(level, player, hand);
     }
 
     @Override
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeCharged) {
+        // Handle Throw release
+        ThrowingMechanics.releaseUsing(config, stack, level, entity, timeCharged);
+
+        return super.releaseUsing(stack, level, entity, timeCharged);
+    }
+
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        // Check Blocking Animation
         ItemUseAnimation animation = BlockingMechanics.getUseAnimation(config);
-        return animation != null ? animation : super.getUseAnimation(stack);
+        if (animation != null) return animation;
+
+        // Check Throwing Animation
+        animation = ThrowingMechanics.getUseAnimation(config);
+        if (animation != null) return animation;
+
+        return super.getUseAnimation(stack);
     }
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        // Check Blocking Duration
         int duration = BlockingMechanics.getUseDuration(config);
-        return duration > 0 ? duration : super.getUseDuration(stack, entity);
+        if (duration > 0) return duration;
+
+        // Check Throwing Duration
+        duration = ThrowingMechanics.getUseDuration(config);
+        if (duration > 0) return duration;
+
+        return super.getUseDuration(stack, entity);
     }
 
     @Override

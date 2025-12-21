@@ -126,7 +126,7 @@ public class ModItems {
                     WeaponFamily.TRIDENT, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1f, 3.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 10, 0.5f, 5
+                    ActionType.THROW, 10, 0.5f, 5
             ), properties));
 
     // ---------- SPEARS ----------
