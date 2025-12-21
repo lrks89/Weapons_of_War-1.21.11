@@ -66,6 +66,7 @@ public class WeaponItem extends Item {
         // 3. Attack Range (Reach)
         // Base player reach is 3.0. We add (maxRange - 3.0).
         // e.g., if maxRange is 5.0, we add 2.0.
+        // We override the display to show "Attack Range: X Blocks"
         builder.add(
                 Attributes.ENTITY_INTERACTION_RANGE,
                 new AttributeModifier(
@@ -73,7 +74,12 @@ public class WeaponItem extends Item {
                         (double) config.maxRange() - 3.0,
                         AttributeModifier.Operation.ADD_VALUE
                 ),
-                EquipmentSlotGroup.MAINHAND
+                EquipmentSlotGroup.MAINHAND,
+                ItemAttributeModifiers.Display.override(
+                        Component.literal(" ")
+                                .append(Component.literal(config.maxRange() + " Attack Range"))
+                                .withStyle(ChatFormatting.DARK_GREEN)
+                )
         );
 
         return builder.build();
