@@ -24,7 +24,7 @@ public class ModItems {
                     WeaponFamily.DAGGER, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 0f, 2.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 10, 0.5f, 2000
+                    ActionType.THROW, 10, 0.5f, 2000
             ), properties));
 
     public static final Item TEST_SHORTSWORD = registerItem("test_02_shortsword",
