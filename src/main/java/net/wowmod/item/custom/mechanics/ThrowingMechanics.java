@@ -80,7 +80,7 @@ public class ThrowingMechanics {
 
     public static ItemUseAnimation getUseAnimation(WeaponConfig config) {
         if (config.actionType() == ActionType.THROW) {
-            return ItemUseAnimation.SPEAR;
+            return ItemUseAnimation.TRIDENT;
         }
         return null;
     }
