@@ -1,0 +1,24 @@
+{
+  "itemGroup.wowmod.weapons_of_war": "Weapons of War",
+
+  "item.wowmod.test_01_dagger": "TEST Dagger",
+  "item.wowmod.test_02_shortsword": "TEST Shortsword",
+  "item.wowmod.test_03_longsword": "TEST Longsword",
+  "item.wowmod.test_04_greatsword": "TEST Greatsword",
+
+  "item.wowmod.test_11_claw": "TEST Claw",
+  "item.wowmod.test_12_shortaxe": "TEST Shortaxe",
+  "item.wowmod.test_13_longaxe": "TEST Longaxe",
+  "item.wowmod.test_14_greataxe": "TEST Greataxe",
+
+  "item.wowmod.test_21_fist": "TEST Fist",
+  "item.wowmod.test_22_shortmace": "TEST Shortmace",
+  "item.wowmod.test_23_longmace": "TEST Longmace",
+  "item.wowmod.test_24_greatmace": "TEST Greatmace",
+
+  "item.wowmod.test_31_trident": "TEST Trident",
+
+  "item.wowmod.test_41_spear": "TEST Spear",
+
+  "item.wowmod.test_51_shield": "TEST Shield"
+}

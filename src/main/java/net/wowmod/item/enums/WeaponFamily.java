@@ -7,18 +7,17 @@ public enum WeaponFamily {
     GREATSWORD,
 
     CLAW,
-    HANDAXE,
-    WARAXE,
-    BATTLEAXE,
+    SHORTAXE,
+    LONGAXE,
+    GREATAXE,
 
     FIST,
-    MACE,
-    WARMACE,
-    BATTLEMACE,
+    SHORTMACE,
+    LONGMACE,
+    GREATMACE,
 
+    TRIDENT,
     SPEAR,
-    GLAIVE,
-    HALBERD,
 
     SHIELD
 }
