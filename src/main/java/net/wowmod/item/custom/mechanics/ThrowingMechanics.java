@@ -12,6 +12,7 @@ import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
+import net.wowmod.entity.ThrownWeaponEntity;
 import net.wowmod.item.custom.WeaponConfig;
 import net.wowmod.item.custom.enums.ActionType;
 
@@ -39,35 +40,29 @@ public class ThrowingMechanics {
         }
 
         if (entity instanceof Player player) {
-            // Corrected: getUseDuration belongs to ItemStack, not Player
             int i = stack.getUseDuration(entity) - timeCharged;
-            if (i < 10) { // Minimum charge time (same as Trident)
+            if (i < 10) {
                 return;
             }
 
-            // Corrected: isClientSide is a private field, must use the method isClientSide()
             if (!level.isClientSide()) {
-                // Corrected: LivingEntity.getSlotForHand is missing in these mappings, manually map InteractionHand to EquipmentSlot
                 EquipmentSlot slot = player.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
                 stack.hurtAndBreak(1, player, slot);
 
-                // Create the projectile.
-                // Note: The stack passed here allows the entity to retain enchantments (like Loyalty).
-                ThrownTrident tridentEntity = new ThrownTrident(level, player, stack);
+                // CHANGED: Use custom ThrownWeaponEntity instead of ThrownTrident
+                ThrownWeaponEntity weaponEntity = new ThrownWeaponEntity(level, player, stack);
 
                 // Setup throw physics (pitch, yaw, roll, speed, divergence)
-                tridentEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F, 1.0F);
+                weaponEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F, 1.0F);
 
                 if (player.getAbilities().instabuild) {
-                    // Corrected: Access Pickup enum via ThrownTrident to avoid importing AbstractArrow
-                    tridentEntity.pickup = ThrownTrident.Pickup.CREATIVE_ONLY;
+                    weaponEntity.pickup = ThrownTrident.Pickup.CREATIVE_ONLY;
                 }
 
-                level.addFreshEntity(tridentEntity);
+                level.addFreshEntity(weaponEntity);
 
                 // Play Throw Sound
-                // Corrected: Uses coordinates explicitly and extracts .value() from the SoundEvent Holder
-                level.playSound(null, tridentEntity.getX(), tridentEntity.getY(), tridentEntity.getZ(), SoundEvents.TRIDENT_THROW.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                level.playSound(null, weaponEntity.getX(), weaponEntity.getY(), weaponEntity.getZ(), SoundEvents.TRIDENT_THROW.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 if (!player.getAbilities().instabuild) {
                     player.getInventory().removeItem(stack);
