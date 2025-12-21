@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public abstract class PlayerEntityMixin implements IParryPlayer {
+public abstract class ParryPlayerEntityMixin implements IParryPlayer {
 
     @Unique
     private long wowmod_lastParryTime = 0;
