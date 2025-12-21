@@ -32,7 +32,7 @@ public class ModItems {
                     WeaponFamily.SHORTSWORD, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 0.5f, 3f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 10, 0.5f, 15
+                    ActionType.THROW, 10, 0.5f, 15
             ), properties));
 
     public static final Item TEST_LONGSWORD = registerItem("test_03_longsword",
@@ -40,7 +40,7 @@ public class ModItems {
                     WeaponFamily.LONGSWORD, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1f, 3.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 10, 0.6f, 15
+                    ActionType.THROW, 10, 0.6f, 15
             ), properties));
 
     public static final Item TEST_GREATSWORD = registerItem("test_04_greatsword",
@@ -48,7 +48,7 @@ public class ModItems {
                     WeaponFamily.GREATSWORD, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1.5f, 4f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 10, 0.7f, 15
+                    ActionType.THROW, 10, 0.7f, 15
             ), properties));
 
     // ---------- AXES ----------
@@ -136,7 +136,7 @@ public class ModItems {
                     WeaponFamily.SPEAR, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 2f, 4.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 10, 0.5f, 5
+                    ActionType.THROW, 10, 0.5f, 5
             ), properties));
 
     // ---------- SHIELDS ----------

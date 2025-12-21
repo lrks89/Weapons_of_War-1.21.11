@@ -12,7 +12,10 @@ import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.wowmod.entity.ThrownWeaponEntity;
+import net.wowmod.item.custom.WeaponItem;
+import net.wowmod.item.custom.enums.WeaponFamily;
 
 public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, ThrownWeaponRenderer.ThrownWeaponState> {
     private final ItemModelResolver itemModelResolver;
@@ -39,8 +42,17 @@ public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, Thr
     public void extractRenderState(ThrownWeaponEntity entity, ThrownWeaponState state, float partialTicks) {
         super.extractRenderState(entity, state, partialTicks);
 
+        ItemStack stack = entity.getItem();
+
+        // 1. Extract the Weapon Family from the item
+        if (stack.getItem() instanceof WeaponItem weaponItem) {
+            state.family = weaponItem.getConfig().family();
+        } else {
+            state.family = null; // Default behavior
+        }
+
         // Populate the ItemStackRenderState with model data
-        this.itemModelResolver.updateForNonLiving(state.itemRenderState, entity.getItem(), ItemDisplayContext.FIXED, entity);
+        this.itemModelResolver.updateForNonLiving(state.itemRenderState, stack, ItemDisplayContext.FIXED, entity);
 
         // Capture interpolated rotation
         state.xRot = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
@@ -66,24 +78,54 @@ public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, Thr
 
         poseStack.pushPose();
 
-        // 1. Rotation logic
+        // 1. Rotation logic: Align the coordinate system with the flight path
         poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(state.xRot));
 
-        // 2. Adjust position to center the item
+        // 2. Shake logic
         if (state.shakeTime > 0.0F) {
             float f = -Mth.sin(state.shakeTime * 3.0F) * state.shakeTime;
             poseStack.mulPose(Axis.ZP.rotationDegrees(f));
         }
 
-        // 3. Scale and Orient
+        // 3. Depth Adjustment (offset along X axis)
+        // Positive X = Deeper in target
+        // Negative X = Further out (sticking out more)
+        double offset = 0.0D;
+
+        if (state.family != null) {
+            switch (state.family) {
+                case DAGGER, FIST, CLAW:
+                    offset = -0.1D;
+                    break;
+                case SHORTSWORD, SHORTAXE, SHORTMACE:
+                    offset = -0.2D;
+                    break;
+                case LONGSWORD, LONGAXE, LONGMACE:
+                    offset = -0.3D;
+                    break;
+                case GREATSWORD, GREATAXE, GREATMACE:
+                    offset = -0.4D;
+                    break;
+                case SPEAR, TRIDENT:
+                    offset = -0.5D;
+                    break;
+                default:
+                    offset = -0.0D;
+            }
+        }
+
+        poseStack.translate(offset, 0.0D, 0.0D);
+
+        // 4. Scale and Orient
         poseStack.scale(this.scale, this.scale, this.scale);
 
-        // Rotate 45 degrees on Z to make the item "point" forward
-        poseStack.mulPose(Axis.ZP.rotationDegrees(-45.0F));
+        // 5. Rotation Correction based on Family
+        float rotation = -135.0F;
+
+        poseStack.mulPose(Axis.ZP.rotationDegrees(rotation));
 
         // Render using the submit method in ItemStackRenderState
-        // This avoids accessing private fields of ItemStackRenderState
         state.itemRenderState.submit(
                 poseStack,
                 submitNodeCollector,
@@ -102,5 +144,6 @@ public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, Thr
         public float yRot;
         public float shakeTime;
         public boolean isInvisible;
+        public WeaponFamily family; // Store the family here
     }
 }
