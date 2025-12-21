@@ -24,7 +24,7 @@ public class ModItems {
                     WeaponFamily.DAGGER, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 0f, 2.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.5f, 10
             ), properties));
 
     public static final Item TEST_SHORTSWORD = registerItem("test_02_shortsword",
@@ -32,7 +32,7 @@ public class ModItems {
                     WeaponFamily.SHORTSWORD, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 0.5f, 3f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.5f, 5
             ), properties));
 
     public static final Item TEST_LONGSWORD = registerItem("test_03_longsword",
@@ -40,7 +40,7 @@ public class ModItems {
                     WeaponFamily.LONGSWORD, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1f, 3.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.6f, 5
             ), properties));
 
     public static final Item TEST_GREATSWORD = registerItem("test_04_greatsword",
@@ -48,7 +48,7 @@ public class ModItems {
                     WeaponFamily.GREATSWORD, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1.5f, 4f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.7f, 5
             ), properties));
 
     // ---------- AXES ----------
@@ -58,7 +58,7 @@ public class ModItems {
                     WeaponFamily.CLAW, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 0f, 2.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.5f, 10
             ), properties));
 
     public static final Item TEST_SHORTAXE = registerItem("test_12_shortaxe",
@@ -66,7 +66,7 @@ public class ModItems {
                     WeaponFamily.SHORTAXE, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 0.5f, 3f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.5f, 5
             ), properties));
 
     public static final Item TEST_LONGAXE = registerItem("test_13_longaxe",
@@ -74,7 +74,7 @@ public class ModItems {
                     WeaponFamily.LONGAXE, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1f, 3.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.6f, 5
             ), properties));
 
     public static final Item TEST_GREATAXE = registerItem("test_14_greataxe",
@@ -82,7 +82,7 @@ public class ModItems {
                     WeaponFamily.GREATAXE, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1.5f, 4f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.7f, 5
             ), properties));
 
     // ---------- MACES ----------
@@ -92,7 +92,7 @@ public class ModItems {
                     WeaponFamily.FIST, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 0f, 2.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.5f, 10
             ), properties));
 
     public static final Item TEST_SHORTMACE = registerItem("test_22_shortmace",
@@ -100,7 +100,7 @@ public class ModItems {
                     WeaponFamily.SHORTMACE, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 0.5f, 3f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.5f, 5
             ), properties));
 
     public static final Item TEST_LONGMACE = registerItem("test_23_longmace",
@@ -108,7 +108,7 @@ public class ModItems {
                     WeaponFamily.LONGMACE, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1f, 3.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.6f, 5
             ), properties));
 
     public static final Item TEST_GREATMACE = registerItem("test_24_greatmace",
@@ -116,7 +116,7 @@ public class ModItems {
                     WeaponFamily.GREATMACE, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1.5f, 4f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.7f, 5
             ), properties));
 
     // ---------- TRIDENTS ----------
@@ -126,7 +126,7 @@ public class ModItems {
                     WeaponFamily.TRIDENT, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 1f, 3.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.5f, 5
             ), properties));
 
     // ---------- SPEARS ----------
@@ -136,7 +136,7 @@ public class ModItems {
                     WeaponFamily.SPEAR, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 2f, 4.5f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 10, 0.5f, 5
             ), properties));
 
     // ---------- SHIELDS ----------
@@ -146,7 +146,7 @@ public class ModItems {
                     WeaponFamily.SHIELD, WeaponStance.ONE_HANDED,
                     8.0, 1.6, 0.5f, 3.0f, 2031, 1,
                     false, false, false, false,
-                    ActionType.BLOCK, 60, 0.5f, 10
+                    ActionType.BLOCK, 6, 1f, 10
             ), properties));
 
     private static Item registerItem(String name, Function<Item.Properties, Item> factory) {
