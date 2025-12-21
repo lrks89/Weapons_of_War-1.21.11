@@ -1,4 +1,4 @@
-package net.wowmod.item.enums;
+package net.wowmod.item.custom.enums;
 
 public enum ActionType {
     NONE,

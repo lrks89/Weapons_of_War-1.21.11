@@ -18,7 +18,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.wowmod.WeaponsOfWar;
 import net.minecraft.world.item.ItemUseAnimation;
-import net.wowmod.item.mechanics.BlockingMechanics;
+import net.wowmod.item.custom.mechanics.BlockingMechanics;
 
 import java.util.function.Consumer;
 

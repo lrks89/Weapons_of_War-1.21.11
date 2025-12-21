@@ -1,8 +1,8 @@
 package net.wowmod.item.custom;
 
-import net.wowmod.item.enums.ActionType;
-import net.wowmod.item.enums.WeaponFamily;
-import net.wowmod.item.enums.WeaponStance;
+import net.wowmod.item.custom.enums.ActionType;
+import net.wowmod.item.custom.enums.WeaponFamily;
+import net.wowmod.item.custom.enums.WeaponStance;
 
 public record WeaponConfig(
         WeaponFamily family,
