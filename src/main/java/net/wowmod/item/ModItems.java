@@ -134,7 +134,7 @@ public class ModItems {
     public static final Item TEST_SPEAR = registerItem("test_41_spear",
             (properties) -> new WeaponItem(new WeaponConfig(
                     WeaponFamily.SPEAR, WeaponStance.ONE_HANDED,
-                    8.0, 1.6, 2.5f, 5f, 2031, 1,
+                    8.0, 1.6, 2f, 4.5f, 2031, 1,
                     false, false, false, false,
                     ActionType.BLOCK, 60, 0.5f, 10
             ), properties));
