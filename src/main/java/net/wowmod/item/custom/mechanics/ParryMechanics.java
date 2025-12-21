@@ -16,11 +16,11 @@ import net.wowmod.item.custom.WeaponConfig;
 import net.wowmod.item.custom.WeaponItem;
 import net.wowmod.item.custom.enums.WeaponFamily;
 import net.wowmod.util.IParryPlayer;
-import net.wowmod.util.IParryStunnedEntity;
+import net.wowmod.util.IParryStaggeredEntity;
 
 public class ParryMechanics {
 
-    private static final int PARRIED_STUN_DURATION = 60; // 3 seconds (60 ticks)
+    private static final int PARRIED_STAGGER_DURATION = 60; // 3 seconds (60 ticks)
     private static final float KNOCKBACK_STRENGTH_SHIELD = 1.5F;
     private static final float KNOCKBACK_STRENGTH_WEAPON = 0.5F;
 
@@ -33,15 +33,15 @@ public class ParryMechanics {
     }
 
     /**
-     * Handles the visual and physical effects of being stunned.
-     * Called every tick for stunned entities.
+     * Handles the visual and physical effects of being staggered.
+     * Called every tick for staggered entities.
      */
-    public static void tickStunnedEntity(LivingEntity entity, int stunTicks) {
+    public static void tickStaggeredEntity(LivingEntity entity, int staggerTicks) {
         if (!entity.level().isClientSide()) {
             ServerLevel serverLevel = (ServerLevel) entity.level();
 
             // 1. Visuals: Crit particles to indicate vulnerability (Counter Attack Window)
-            if (stunTicks % 5 == 0) {
+            if (staggerTicks % 5 == 0) {
                 serverLevel.sendParticles(ParticleTypes.CRIT,
                         entity.getX(), entity.getEyeY() + 0.5, entity.getZ(),
                         1, 0.2, 0.2, 0.2, 0.1);
@@ -54,10 +54,10 @@ public class ParryMechanics {
     }
 
     /**
-     * Calculates the modified damage if the target is stunned.
+     * Calculates the modified damage if the target is staggered.
      */
-    public static float modifyDamageTaken(LivingEntity entity, float amount, DamageSource source, int stunTicks) {
-        if (stunTicks > 0 && source.getEntity() instanceof Player) {
+    public static float modifyDamageTaken(LivingEntity entity, float amount, DamageSource source, int staggerTicks) {
+        if (staggerTicks > 0 && source.getEntity() instanceof Player) {
             return amount * 1.5F;
         }
         return amount;
@@ -115,8 +115,8 @@ public class ParryMechanics {
 
         if (attacker instanceof LivingEntity livingAttacker && !(source.getDirectEntity() instanceof Projectile)) {
 
-            if (livingAttacker instanceof IParryStunnedEntity stunnedAttacker) {
-                stunnedAttacker.wowmod_setStunTicks(PARRIED_STUN_DURATION);
+            if (livingAttacker instanceof IParryStaggeredEntity staggeredAttacker) {
+                staggeredAttacker.wowmod_setStaggerTicks(PARRIED_STAGGER_DURATION);
             }
 
             double strength = isShield ? KNOCKBACK_STRENGTH_SHIELD : KNOCKBACK_STRENGTH_WEAPON;

@@ -36,7 +36,8 @@ public class WeaponItem extends Item {
 
     private static Properties applyWeaponComponents(WeaponConfig config, Properties properties) {
         // Core components
-        properties.component(DataComponents.MAX_DAMAGE, config.durability())
+        properties.stacksTo(1) // Make weapons unstackable
+                .component(DataComponents.MAX_DAMAGE, config.durability())
                 .component(DataComponents.ATTACK_RANGE, new AttackRange(config.minRange(), config.maxRange(), config.minRange(), config.maxRange(), 0.3F, 1.0F))
                 .component(DataComponents.ATTRIBUTE_MODIFIERS, createAttributes(config))
                 .component(DataComponents.WEAPON, new Weapon(config.durabilityPerHit()));

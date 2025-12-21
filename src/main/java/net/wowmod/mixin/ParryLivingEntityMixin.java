@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.wowmod.item.custom.mechanics.ParryMechanics;
 import net.wowmod.item.custom.WeaponItem;
 import net.wowmod.item.custom.enums.ActionType;
-import net.wowmod.util.IParryStunnedEntity;
+import net.wowmod.util.IParryStaggeredEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,37 +20,37 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class ParryLivingEntityMixin implements IParryStunnedEntity {
+public abstract class ParryLivingEntityMixin implements IParryStaggeredEntity {
 
     @Unique
-    private int wowmod_parriedStunTicks = 0;
+    private int wowmod_parriedStaggerTicks = 0;
 
     @Override
-    public int wowmod_getStunTicks() {
-        return this.wowmod_parriedStunTicks;
+    public int wowmod_getStaggerTicks() {
+        return this.wowmod_parriedStaggerTicks;
     }
 
     @Override
-    public void wowmod_setStunTicks(int ticks) {
-        this.wowmod_parriedStunTicks = ticks;
+    public void wowmod_setStaggerTicks(int ticks) {
+        this.wowmod_parriedStaggerTicks = ticks;
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
-    private void wowmod_tickStun(CallbackInfo ci) {
-        if (this.wowmod_parriedStunTicks > 0) {
-            this.wowmod_parriedStunTicks--;
+    private void wowmod_tickStagger(CallbackInfo ci) {
+        if (this.wowmod_parriedStaggerTicks > 0) {
+            this.wowmod_parriedStaggerTicks--;
 
             // Delegate logic to ParryMechanics
             LivingEntity entity = (LivingEntity) (Object) this;
-            ParryMechanics.tickStunnedEntity(entity, this.wowmod_parriedStunTicks);
+            ParryMechanics.tickStaggeredEntity(entity, this.wowmod_parriedStaggerTicks);
         }
     }
 
-    // Increases damage taken if the entity is stunned (Counter Attack Mechanic)
+    // Increases damage taken if the entity is staggered (Counter Attack Mechanic)
     @ModifyVariable(method = "hurtServer", at = @At("HEAD"), argsOnly = true)
     private float wowmod_modifyDamageTaken(float amount, ServerLevel level, DamageSource source) {
         // Delegate calculation to ParryMechanics
-        return ParryMechanics.modifyDamageTaken((LivingEntity)(Object)this, amount, source, this.wowmod_parriedStunTicks);
+        return ParryMechanics.modifyDamageTaken((LivingEntity)(Object)this, amount, source, this.wowmod_parriedStaggerTicks);
     }
 
     // FIX: Initialize Parry Timer when the blocking action actually starts
