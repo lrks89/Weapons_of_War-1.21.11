@@ -1,11 +1,13 @@
 package net.wowmod.item;
 
+import net.minecraft.client.model.effects.SpearAnimations;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.MaceItem;
 import net.wowmod.WeaponsOfWar;
 import net.wowmod.item.custom.WeaponConfig;
 import net.wowmod.item.custom.WeaponItem;
