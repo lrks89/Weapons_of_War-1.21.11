@@ -27,15 +27,14 @@ public class ChargingMechanics {
 
     public static void applyComponents(WeaponConfig config, Item.Properties properties) {
         if (config.actionType() == ActionType.CHARGE) {
-            // UPDATED: We set the maxDurationTicks to 200 (10 seconds).
-            // The animation logic in SpearAnimations will see this and keep the weapon
-            // steady until approximately tick 160 (8 seconds), then start shaking.
+            // UPDATED: Shortened maxDurationTicks from 200 to 120 (6 seconds).
+            // This will make the charge expire faster and speed up the animation timeline.
             properties.component(DataComponents.KINETIC_WEAPON, new KineticWeapon(
                     10, // contactCooldownTicks
                     10, // delayTicks
                     Optional.empty(),
                     Optional.empty(),
-                    KineticWeapon.Condition.ofAttackerSpeed(200, 0.2f), // 200 ticks duration
+                    KineticWeapon.Condition.ofAttackerSpeed(120, 0.2f), // 120 ticks duration
                     0.5f,
                     1.5f,
                     Optional.empty(),
