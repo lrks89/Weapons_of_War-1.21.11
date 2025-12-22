@@ -18,7 +18,9 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.wowmod.WeaponsOfWar;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.wowmod.item.custom.enums.ActionType;
 import net.wowmod.item.custom.mechanics.BlockingMechanics;
+import net.wowmod.item.custom.mechanics.ChargingMechanics;
 import net.wowmod.item.custom.mechanics.ThrowingMechanics;
 
 import java.util.function.Consumer;
@@ -30,7 +32,7 @@ public class WeaponItem extends Item {
     private static final Identifier RANGE_MODIFIER_ID = Identifier.fromNamespaceAndPath(WeaponsOfWar.MOD_ID, "weapon_range");
 
     public WeaponItem(WeaponConfig config, Properties properties) {
-        // Apply base stats and delegate blocking component application to BlockingMechanics
+        // Apply base stats and delegate component application to mechanics classes
         super(applyWeaponComponents(config, properties));
         this.config = config;
     }
@@ -43,8 +45,11 @@ public class WeaponItem extends Item {
                 .component(DataComponents.ATTRIBUTE_MODIFIERS, createAttributes(config))
                 .component(DataComponents.WEAPON, new Weapon(config.durabilityPerHit()));
 
-        // Delegate blocking logic (Damage Reduction component)
+        // Delegate blocking logic
         BlockingMechanics.applyComponents(config, properties);
+
+        // Delegate charging logic (Adds KineticWeapon component)
+        ChargingMechanics.applyComponents(config, properties);
 
         return properties;
     }
@@ -90,8 +95,9 @@ public class WeaponItem extends Item {
                 )
         );
 
-        // 4. Delegate Block & Parry Tooltips
+        // 4. Delegate Tooltips for specialized mechanics
         BlockingMechanics.addTooltipAttributes(config, builder);
+        ChargingMechanics.addTooltipAttributes(config, builder);
 
         return builder.build();
     }
@@ -112,6 +118,12 @@ public class WeaponItem extends Item {
         InteractionResult throwResult = ThrowingMechanics.handleUse(config, level, player, hand);
         if (throwResult != InteractionResult.PASS) {
             return throwResult;
+        }
+
+        // 3. Try Charging
+        InteractionResult chargeResult = ChargingMechanics.use(level, player, hand);
+        if (chargeResult != InteractionResult.PASS) {
+            return chargeResult;
         }
 
         return super.use(level, player, hand);
@@ -135,6 +147,11 @@ public class WeaponItem extends Item {
         animation = ThrowingMechanics.getUseAnimation(config);
         if (animation != null) return animation;
 
+        // Check Charging Animation
+        if (config.actionType() == ActionType.CHARGE) {
+            return ItemUseAnimation.SPEAR;
+        }
+
         return super.getUseAnimation(stack);
     }
 
@@ -147,6 +164,11 @@ public class WeaponItem extends Item {
         // Check Throwing Duration
         duration = ThrowingMechanics.getUseDuration(config);
         if (duration > 0) return duration;
+
+        // Check Charging Duration
+        if (config.actionType() == ActionType.CHARGE) {
+            return 72000;
+        }
 
         return super.getUseDuration(stack, entity);
     }
