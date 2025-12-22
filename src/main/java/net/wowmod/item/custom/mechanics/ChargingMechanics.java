@@ -23,36 +23,27 @@ import net.wowmod.item.custom.enums.ActionType;
 
 import java.util.Optional;
 
-/**
- * Handles the logic for weapons with the CHARGE action type.
- * Utilizes the Vanilla KineticWeapon component for velocity-based damage.
- */
 public class ChargingMechanics {
 
-    /**
-     * Applies the KineticWeapon component during item registration.
-     */
     public static void applyComponents(WeaponConfig config, Item.Properties properties) {
         if (config.actionType() == ActionType.CHARGE) {
-            // Define standard charge conditions (e.g., dismount, knockback, damage)
-            // Using standard vanilla-like values for a kinetic weapon
+            // UPDATED: We set the maxDurationTicks to 200 (10 seconds).
+            // The animation logic in SpearAnimations will see this and keep the weapon
+            // steady until approximately tick 160 (8 seconds), then start shaking.
             properties.component(DataComponents.KINETIC_WEAPON, new KineticWeapon(
                     10, // contactCooldownTicks
                     10, // delayTicks
-                    Optional.empty(), // dismount
-                    Optional.empty(), // knockback
-                    KineticWeapon.Condition.ofAttackerSpeed(20, 0.2f), // damage conditions
-                    0.5f, // forwardMovement
-                    1.5f, // damageMultiplier
-                    Optional.empty(), // sound
-                    Optional.empty()  // hitSound
+                    Optional.empty(),
+                    Optional.empty(),
+                    KineticWeapon.Condition.ofAttackerSpeed(200, 0.2f), // 200 ticks duration
+                    0.5f,
+                    1.5f,
+                    Optional.empty(),
+                    Optional.empty()
             ));
         }
     }
 
-    /**
-     * Adds tooltip information for the charging mechanic.
-     */
     public static void addTooltipAttributes(WeaponConfig config, ItemAttributeModifiers.Builder builder) {
         if (config.actionType() == ActionType.CHARGE) {
             builder.add(
@@ -65,41 +56,28 @@ public class ChargingMechanics {
                     EquipmentSlotGroup.MAINHAND,
                     ItemAttributeModifiers.Display.override(
                             Component.literal(" ")
-                                    .append(Component.literal("Kinetic Charge Action"))
+                                    .append(Component.translatable("tooltip.wowmod.charge_action"))
                                     .withStyle(ChatFormatting.BLUE)
                     )
             );
         }
     }
 
-    /**
-     * Called when the player right-clicks with a charging weapon.
-     */
     public static InteractionResult use(Level world, Player user, InteractionHand hand) {
         ItemStack itemStack = user.getItemInHand(hand);
-
-        // Ensure the item has the kinetic weapon component to function
         if (itemStack.has(DataComponents.KINETIC_WEAPON)) {
             user.startUsingItem(hand);
             return InteractionResult.CONSUME;
         }
-
         return InteractionResult.PASS;
     }
 
-    /**
-     * Called every tick while the item is being used (charged).
-     * This triggers the vanilla KineticWeapon collision checks.
-     */
     public static void usageTick(Level world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         if (!world.isClientSide()) {
             KineticWeapon kineticWeapon = stack.get(DataComponents.KINETIC_WEAPON);
             if (kineticWeapon != null) {
-                // Determine slot (Primary hand usually)
                 EquipmentSlot slot = user.getUsedItemHand() == InteractionHand.MAIN_HAND
                         ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-
-                // Trigger vanilla damage/collision logic
                 kineticWeapon.damageEntities(stack, remainingUseTicks, user, slot);
             }
         }
