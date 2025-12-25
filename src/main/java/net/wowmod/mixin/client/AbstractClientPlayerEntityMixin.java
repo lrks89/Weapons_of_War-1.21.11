@@ -24,7 +24,6 @@ public abstract class AbstractClientPlayerEntityMixin extends Player implements 
     @Unique
     private final AnimationState sprintAnimationState = new AnimationState();
 
-    // Updated to match the 2-argument constructor found in your AbstractClientPlayer source
     public AbstractClientPlayerEntityMixin(Level level, GameProfile gameProfile) {
         super(level, gameProfile);
     }
@@ -46,33 +45,26 @@ public abstract class AbstractClientPlayerEntityMixin extends Player implements 
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tickAnimations(CallbackInfo ci) {
-        // Only play animations if holding a custom WeaponItem
-        if (this.getMainHandItem().getItem() instanceof WeaponItem) {
-            // Logic to determine which animation to play
-            // FIX: Changed horizontalLengthSquared() to horizontalDistanceSqr() to match your mappings
-            boolean isMoving = this.getDeltaMovement().horizontalDistanceSqr() > 0.00001;
-            boolean isSprinting = this.isSprinting();
+        // Removed the check for WeaponItem so animations play all the time
 
-            if (isMoving) {
-                if (isSprinting) {
-                    this.idleAnimationState.stop();
-                    this.walkAnimationState.stop();
-                    this.sprintAnimationState.startIfStopped(this.tickCount);
-                } else {
-                    this.idleAnimationState.stop();
-                    this.sprintAnimationState.stop();
-                    this.walkAnimationState.startIfStopped(this.tickCount);
-                }
-            } else {
+        // Logic to determine which animation to play
+        boolean isMoving = this.getDeltaMovement().horizontalDistanceSqr() > 0.00001;
+        boolean isSprinting = this.isSprinting();
+
+        if (isMoving) {
+            if (isSprinting) {
+                this.idleAnimationState.stop();
                 this.walkAnimationState.stop();
+                this.sprintAnimationState.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationState.stop();
                 this.sprintAnimationState.stop();
-                this.idleAnimationState.startIfStopped(this.tickCount);
+                this.walkAnimationState.startIfStopped(this.tickCount);
             }
         } else {
-            // Stop everything if not holding the weapon
-            this.idleAnimationState.stop();
             this.walkAnimationState.stop();
             this.sprintAnimationState.stop();
+            this.idleAnimationState.startIfStopped(this.tickCount);
         }
     }
 }
