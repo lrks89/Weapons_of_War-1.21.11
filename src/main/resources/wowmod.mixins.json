@@ -3,6 +3,11 @@
 	"package": "net.wowmod.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
+      "client.AbstractClientPlayerEntityMixin",
+      "client.HumanoidRenderStateMixin",
+      "client.PlayerModelMixin",
+      "client.PlayerRendererMixin",
+
       "ChargeMovementMixin",
       "ParryLivingEntityMixin",
       "ParryPlayerEntityMixin"
